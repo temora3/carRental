@@ -10,9 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 public class customersignup extends JFrame implements ActionListener {
-    private JLabel  lblpassword, lblfname,   lblphonenumber, lblemail, lblconfirmpassword;
+    private JLabel lblpassword, lblfname, lblphonenumber, lblemail, lblconfirmpassword;
     private JPasswordField passwordField, confirmpasswordfield;
-    private JTextField  txtfname, txtemail, txtphonenumber;
+    private JTextField txtfname, txtemail, txtphonenumber;
 
     private JButton btncreate, btnback;
 
@@ -60,7 +60,7 @@ public class customersignup extends JFrame implements ActionListener {
         add(confirmpasswordfield);
         add(btncreate);
         add(btnback);
-       
+
         btncreate.addActionListener(this);
         btnback.addActionListener(
                 new ActionListener() {
@@ -76,13 +76,13 @@ public class customersignup extends JFrame implements ActionListener {
 
                         customersignup Frame = new customersignup();
                     }
-                }
-        );
+                });
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         registerbuyer();
-        buyer objFrame= new buyer();
+        buyer objFrame = new buyer();
         objFrame.setSize(420, 420);
         objFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         objFrame.setTitle("Tecoma Rental: customer login");
@@ -90,6 +90,7 @@ public class customersignup extends JFrame implements ActionListener {
         objFrame.setResizable(false);
         objFrame.setVisible(true);
     }
+
     public void registerbuyer() {
         String fname = txtfname.getText();
         String email = txtemail.getText();
@@ -111,15 +112,15 @@ public class customersignup extends JFrame implements ActionListener {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-         insert(fname, email, phone, password);
-
+        insert(fname, email, phone, password);
 
     }
-    private buyer  insert(String fname, String email, String phone, String password) {
-        buyer buyer=null;
 
-        try{
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test","root","");
+    private buyer insert(String fname, String email, String phone, String password) {
+        buyer buyer = null;
+
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tecomarental", "root", "");
             // Connected to database successfully...
 
             Statement stmt = conn.createStatement();
@@ -131,7 +132,7 @@ public class customersignup extends JFrame implements ActionListener {
             preparedStatement.setString(3, phone);
             preparedStatement.setString(4, password);
 
-            //Insert row into the table
+            // Insert row into the table
             int addedRows = preparedStatement.executeUpdate();
             if (addedRows > 0) {
                 buyer = new buyer();
@@ -143,11 +144,10 @@ public class customersignup extends JFrame implements ActionListener {
 
             stmt.close();
             conn.close();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return buyer;
     }
 }
-    

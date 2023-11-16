@@ -92,9 +92,16 @@ public class buyer extends JFrame implements ActionListener {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tecomarental", "root", "");
             String sql = "SELECT * FROM customer_cred WHERE customerEmail = ?";
+            String sessionName = "SELECT customerName FROM customer_cred WHERE customerEmail = ?";
+            String nameCust = "INSERT INTO cust_temp (nameValue) " + "VALUES (?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, email);
+            PreparedStatement nameVer = conn.prepareStatement(sessionName);
+            PreparedStatement statement = conn.prepareStatement(nameCust);
+            stmt.setString(1, email);   
+            nameVer.setString(2, email);
             ResultSet resultSet = stmt.executeQuery();
+            ResultSet resultSet2 = nameVer.executeQuery();
+            statement.executeUpdate();
             if (resultSet.next()) {
                 String storedPassword = resultSet.getString("customerPassword");
                 if (storedPassword != null && storedPassword.equals(password)) {
