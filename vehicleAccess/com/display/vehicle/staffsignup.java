@@ -7,13 +7,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-public class staffsignup extends JFrame implements ActionListener {
+public class staffsignup extends JFrame{
     private JLabel lblID,lblpassword,lblconfpassword,lblphone,lblfname;
     private JTextField txtID,txtphone,txtname;
     private JPasswordField passwordField,confpasswordfield;
     private JButton btnsubmit,btnback;
     public staffsignup() {
         setLayout(null);
+        this.setBounds(370, 100, 800, 480);
+        
         lblfname=new JLabel("Name: ");
         txtname=new JTextField(100);
         lblphone=new JLabel("Phone number: ");
@@ -44,8 +46,6 @@ public class staffsignup extends JFrame implements ActionListener {
          lblconfpassword.setFont(new Font("Times new roman", Font.PLAIN, 16));
          lblfname.setFont(new Font("Times new roman", Font.PLAIN, 16));
 
-         add(lblID);
-         add(txtID);
          add(lblphone);
          add(txtphone);
          add(lblfname);
@@ -56,31 +56,29 @@ public class staffsignup extends JFrame implements ActionListener {
          add(confpasswordfield);
          add(btnsubmit);
          add(btnback);
-         btnsubmit.addActionListener(this);
-
+         btnsubmit.addActionListener(staffRegisterListener);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    ActionListener staffRegisterListener  = e -> {
+        this.dispose();
         registerstaff();
         staff objFrame =  new staff();
-
         objFrame.setSize(420, 420);
         objFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         objFrame.setTitle("Tecoma Rental: Staff login");
         objFrame.getContentPane().setBackground(new Color(242, 210, 189));
         objFrame.setResizable(false);
         objFrame.setVisible(true);
+    };
 
-    }
+    
 
     private void registerstaff() {
-        String ID = txtID.getText();
         String fname=txtname.getText();
         String phone=txtphone.getText();
         String password = String.valueOf(passwordField.getPassword());
         String confirmpassword = String.valueOf(confpasswordfield.getPassword());
-        if (ID.isEmpty()  || password.isEmpty() || confirmpassword.isEmpty()) {
+        if (password.isEmpty() || confirmpassword.isEmpty()) {
             JOptionPane.showMessageDialog(null,
                     "Please enter all fields",
                     "try again",
@@ -95,11 +93,11 @@ public class staffsignup extends JFrame implements ActionListener {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        insert(ID,fname,phone ,password);
+        insert(fname,phone ,password);
 
 
     }
-    private staff  insert(String ID,String fname,String phone ,String password) {
+    private staff  insert(String fname,String phone ,String password) {
         staff staff=null;
 
         try{
@@ -107,19 +105,23 @@ public class staffsignup extends JFrame implements ActionListener {
             // Connected to database successfully...
 
             Statement stmt = conn.createStatement();
-            String sql = "INSERT INTO staff_cred (staff_ID, staffName, staffPhone, staffPassword) " +
-                    "VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO staff_cred (staffName, staffPhone, staffPassword) " +
+                    "VALUES (?, ?, ?)";
+            String staffValue = "SELECT staffName FROM staff_cred WHERE staff_ID = ?";
+            String staffname = "INSERT INTO staff_temp (nameValue) " + "VALUES (?)";
+
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setString(1, ID);
-            preparedStatement.setString(2, fname);
-            preparedStatement.setString(3, phone);
-            preparedStatement.setString(4, password);
+            PreparedStatement staffStatement = conn.prepareStatement(staffValue);
+            PreparedStatement staffTemp = conn.prepareStatement(staffname);
+            
+            preparedStatement.setString(1, fname);
+            preparedStatement.setString(2, phone);
+            preparedStatement.setString(3, password);
 
             //Insert row into the table
             int addedRows = preparedStatement.executeUpdate();
             if (addedRows > 0) {
                 staff = new staff();
-                staff.ID = ID;
                 staff.fname = fname;
                 staff.phone = phone;
                 staff.password = password;

@@ -233,12 +233,23 @@ public class cust_vehicle extends JFrame {
 
         @Override
         public void windowClosing(WindowEvent e) {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                connection = DriverManager.getConnection(url, username, password);
+                statement = connection.createStatement();
+
+                String deleteQuery = "DELETE FROM tecomarental.cust_temp";
+                PreparedStatement statementP = connection.prepareStatement(deleteQuery);
+
+                statementP.executeUpdate(deleteQuery);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
         @Override
         public void windowClosed(WindowEvent e) {
             try {
-
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(url, username, password);
                 statement = connection.createStatement();

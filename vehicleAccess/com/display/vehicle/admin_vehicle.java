@@ -184,22 +184,30 @@ public class admin_vehicle extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(url, username, password);
-                statement = connection.createStatement();
-                resultSet = connection.createStatement().executeQuery("SELECT * FROM tecomarental.vehicle_table");
-                String query = "insert into test.vehicle_table(vehicleName, vehiclePlate, vehiclePrice) values(?,?,?)";
-                PreparedStatement pst = connection.prepareStatement(query);
-                pst.setString(1, vehNameField.getText());
-                pst.setString(2, vehPlateField.getText());
-                pst.setString(3, vehPriceField.getText());
-                pst.executeUpdate();
-                DefaultTableModel model = (DefaultTableModel) table.getModel();
-                model.setRowCount(0);
-                showVehicle();
-                JOptionPane.showMessageDialog(null, "Inserted Successfully!");
+                if (((CharSequence) vehNameField).isEmpty() || ((CharSequence) vehPlateField).isEmpty() || ((CharSequence) vehPriceField).isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please fill in all the fields");
+                }
+                else{
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    connection = DriverManager.getConnection(url, username, password);
+                    statement = connection.createStatement();
+                    resultSet = connection.createStatement().executeQuery("SELECT * FROM tecomarental.vehicle_table");
+                    String query = "insert into vehicle_table(vehicleName, vehiclePlate, vehiclePrice) values(?,?,?)";
+                    PreparedStatement pst = connection.prepareStatement(query);
+                    pst.setString(1, vehNameField.getText());
+                    pst.setString(2, vehPlateField.getText());
+                    pst.setString(3, vehPriceField.getText());
+                    pst.executeUpdate();
+                    DefaultTableModel model = (DefaultTableModel) table.getModel();
+                    model.setRowCount(0);
+                    showVehicle();
+                    vehNameField.setText("");
+                    vehPlateField.setText("");
+                    vehPriceField.setText("");
+                    JOptionPane.showMessageDialog(null, "Inserted Successfully!");
+                }
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog(null, "Please fill in all the fields");
             }
         }
     };
@@ -244,7 +252,7 @@ public class admin_vehicle extends JFrame {
                 connection = DriverManager.getConnection(url, username, password);
                 int row = table.getSelectedRow();
                 String tablevalue = (table.getModel().getValueAt(row, 0).toString());
-                String query = "UPDATE tecomarental.vehicle_table SET vehicleName = ?, vehiclePlate = ?, vehiclePrice= ? where vehicleName='"
+                String query = "UPDATE vehicle_table SET vehicleName = ?, vehiclePlate = ?, vehiclePrice= ? where vehicleName='"
                         + tablevalue + "'";
                 PreparedStatement pst = connection.prepareStatement(query);
                 pst.setString(1, vehNameField.getText());
@@ -254,9 +262,12 @@ public class admin_vehicle extends JFrame {
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.setRowCount(0);
                 showVehicle();
+                vehNameField.setText("");
+                vehPlateField.setText("");
+                vehPriceField.setText("");
                 JOptionPane.showMessageDialog(null, "Updated Successfully!");
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, exec);
+                JOptionPane.showMessageDialog(null, "Please pick the Vehicle you want to update on the table");
             }
 
         }
@@ -277,9 +288,12 @@ public class admin_vehicle extends JFrame {
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.setRowCount(0);
                 showVehicle();
+                vehNameField.setText("");
+                vehPlateField.setText("");
+                vehPriceField.setText("");
                 JOptionPane.showMessageDialog(null, "Deleted Successfully!");
             } catch (Exception eq) {
-                JOptionPane.showMessageDialog(null, es);
+                JOptionPane.showMessageDialog(null, "Please pick the Vehicle you want to delete from the table");
             }
 
         }

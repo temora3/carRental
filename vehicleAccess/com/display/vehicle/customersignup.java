@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 
-public class customersignup extends JFrame implements ActionListener {
+public class customersignup extends JFrame{
     private JLabel lblpassword, lblfname, lblphonenumber, lblemail, lblconfirmpassword;
     private JPasswordField passwordField, confirmpasswordfield;
     private JTextField txtfname, txtemail, txtphonenumber;
@@ -19,6 +19,8 @@ public class customersignup extends JFrame implements ActionListener {
     public customersignup() {
         setLayout(new FlowLayout());
         setLayout(null);
+        this.setBounds(370, 100, 800, 480);
+
         btncreate = new JButton("Create");
         lblpassword = new JLabel("Password: ");
         lblemail = new JLabel("Email :");
@@ -61,26 +63,12 @@ public class customersignup extends JFrame implements ActionListener {
         add(btncreate);
         add(btnback);
 
-        btncreate.addActionListener(this);
-        btnback.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        buyer objFrame = new buyer();
-                        objFrame.setSize(420, 420);
-                        objFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        objFrame.setTitle("Tecoma Rental: customer login");
-                        objFrame.getContentPane().setBackground(new Color(242, 210, 189));
-                        objFrame.setResizable(false);
-                        objFrame.setVisible(true);
-
-                        customersignup Frame = new customersignup();
-                    }
-                });
+        btncreate.addActionListener(custSignUp);
+        btnback.addActionListener(backButtonListener);
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    
+    ActionListener custSignUp  = e -> {
+        this.dispose();
         registerbuyer();
         buyer objFrame = new buyer();
         objFrame.setSize(420, 420);
@@ -89,7 +77,18 @@ public class customersignup extends JFrame implements ActionListener {
         objFrame.getContentPane().setBackground(new Color(242, 210, 189));
         objFrame.setResizable(false);
         objFrame.setVisible(true);
-    }
+    };
+
+    ActionListener backButtonListener  = e -> {
+        this.dispose();
+        buyer objFrame = new buyer();
+        objFrame.setSize(420, 420);
+        objFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        objFrame.setTitle("Tecoma Rental: customer login");
+        objFrame.getContentPane().setBackground(new Color(242, 210, 189));
+        objFrame.setResizable(false);
+        objFrame.setVisible(true);
+    };
 
     public void registerbuyer() {
         String fname = txtfname.getText();
@@ -130,7 +129,7 @@ public class customersignup extends JFrame implements ActionListener {
             preparedStatement.setString(1, fname);
             preparedStatement.setString(2, email);
             preparedStatement.setString(3, phone);
-            preparedStatement.setString(4, password);
+            preparedStatement.setString(4, password); 
 
             // Insert row into the table
             int addedRows = preparedStatement.executeUpdate();

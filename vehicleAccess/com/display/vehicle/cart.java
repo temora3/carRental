@@ -187,7 +187,6 @@ public class cart extends JFrame {
         @Override
         public void windowClosed(WindowEvent e) {
             try {
-
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(url, username, password);
                 statement = connection.createStatement();

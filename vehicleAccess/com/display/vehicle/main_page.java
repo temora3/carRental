@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class main_page extends JFrame implements ActionListener {
+public class main_page extends JFrame{
     private JButton btnstaff, btnbuyer;
     private JLabel lblgreeting;
 
@@ -36,24 +36,22 @@ public class main_page extends JFrame implements ActionListener {
 
         add(btnbuyer);
         add(btnstaff);
-        btnstaff.addActionListener(this);
-        btnbuyer.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        buyer objFrame = new buyer();
-                        objFrame.setSize(420, 420);
-                        objFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                        objFrame.setTitle("Tecoma Rental: customer login");
-                        objFrame.getContentPane().setBackground(new Color(242, 210, 189));
-                        objFrame.setResizable(false);
-                        objFrame.setVisible(true);
-                    }
-                });
+        btnstaff.addActionListener(staffOpener);
+        btnbuyer.addActionListener(buyerOpener);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    ActionListener buyerOpener  = e -> {
+        this.dispose();
+        buyer objFrame = new buyer();
+        objFrame.setSize(420, 420);
+        objFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        objFrame.setTitle("Tecoma Rental: customer login");
+        objFrame.getContentPane().setBackground(new Color(242, 210, 189));
+        objFrame.setResizable(false);
+        objFrame.setVisible(true);
+    };
+
+    ActionListener staffOpener  = e -> {
         this.dispose();
         staff objFrame = new staff();
         objFrame.setSize(420, 420);
@@ -62,7 +60,8 @@ public class main_page extends JFrame implements ActionListener {
         objFrame.getContentPane().setBackground(new Color(242, 210, 189));
         objFrame.setResizable(false);
         objFrame.setVisible(true);
-    }
+    };
+
 
     public static void main(String args[]) {
         main_page objFrame = new main_page();
