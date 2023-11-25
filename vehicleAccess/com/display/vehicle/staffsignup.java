@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 public class staffsignup extends JFrame{
     private JLabel lblID,lblpassword,lblconfpassword,lblphone,lblfname;
@@ -107,7 +108,7 @@ public class staffsignup extends JFrame{
             Statement stmt = conn.createStatement();
             String sql = "INSERT INTO staff_cred (staffName, staffPhone, staffPassword) " +
                     "VALUES (?, ?, ?)";
-            String staffValue = "SELECT staffName FROM staff_cred WHERE staff_ID = ?";
+            String staffValue = "SELECT staff_ID FROM staff_cred WHERE staffName = ?";
             String staffname = "INSERT INTO staff_temp (nameValue) " + "VALUES (?)";
 
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -117,6 +118,7 @@ public class staffsignup extends JFrame{
             preparedStatement.setString(1, fname);
             preparedStatement.setString(2, phone);
             preparedStatement.setString(3, password);
+            staffStatement.setString(1, fname);
 
             //Insert row into the table
             int addedRows = preparedStatement.executeUpdate();
@@ -125,6 +127,12 @@ public class staffsignup extends JFrame{
                 staff.fname = fname;
                 staff.phone = phone;
                 staff.password = password;
+            }
+
+            ResultSet resultSet = staffStatement.executeQuery();
+            while (resultSet.next()) {
+                String customerId = resultSet.getString("staff_ID");
+                JOptionPane.showMessageDialog(null, "Your Staff ID is " + customerId);
             }
 
             stmt.close();

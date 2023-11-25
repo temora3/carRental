@@ -70,7 +70,7 @@ public class Customer {
         try (Connection connection = DriverManager.getConnection(url, username, password);
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(query)) {
-
+                        
             while (resultSet.next()) {
                 int customerId = resultSet.getInt("customerID");
                 String customerName = resultSet.getString("customerName");
